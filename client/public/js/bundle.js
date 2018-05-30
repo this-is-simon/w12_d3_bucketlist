@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\");\nconst Countries = __webpack_require__(/*! ./models/countries.js */ \"./client/src/models/countries.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n    console.log('DOM content loaded');\n    const mainListViewContainer = document.querySelector('#main-list-view');\n    const mainListView = new MainListView(mainListViewContainer);\n    mainListView.bindEvents();\n\n    const countriesUrl = 'http://localhost:3000/api/countries'\n    const countries = new Countries(countriesUrl);\n    countries.getData();\n})\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\");\nconst Countries = __webpack_require__(/*! ./models/countries.js */ \"./client/src/models/countries.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n    console.log('DOM content loaded');\n    const mainListViewContainer = document.querySelector('#main-list-view');\n    const mainListView = new MainListView(mainListViewContainer);\n    mainListView.bindEvents();\n\n    const countriesUrl = 'http://localhost:3000/api/countries'\n    const countries = new Countries(countriesUrl);\n    countries.receiveClickedCountry();\n    countries.getData();\n})\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
 
 /***/ }),
 
@@ -126,7 +126,7 @@ eval("const Request = function (url) {\n  this.url = url;\n};\n\nRequest.prototy
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./client/src/helpers/request.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\nconst Countries = function (url) {\n  this.url = url;\n};\n\nCountries.prototype.getData = function () {\n  const request = new Request(this.url);\n  request.get()\n    .then((countries) => {\n      PubSub.publish('Countries:data-loaded', countries)\n    })\n    .catch(console.error);\n};\n\n\n\nmodule.exports = Countries;\n\n\n//# sourceURL=webpack:///./client/src/models/countries.js?");
+eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./client/src/helpers/request.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\nconst Countries = function (url) {\n  this.url = url;\n};\n\nCountries.prototype.getData = function () {\n  const request = new Request(this.url);\n  request.get()\n    .then((countries) => {\n      PubSub.publish('Countries:data-loaded', countries)\n    })\n    .catch(console.error);\n};\n\nCountries.prototype.receiveClickedCountry = function (event) {\n  PubSub.subscribe('CountryView:country-clicked', (event) => {\n    console.log('Clicked country subscribe ID?', event.detail);\n    this.updateRecord(event.detail);\n  });\n};\n\nCountries.prototype.updateRecord = function(id) {\n  //TODO Incorporate ID\n  const request = new Request(this.url);\n  //TODO use the id to access the country's onBucketList value to True\n  request.put()\n    .then((countries) => {\n      PubSub.publish('Countries:data-loaded', countries)\n    })\n    .catch(console.error);\n}\n\n\n\nmodule.exports = Countries;\n\n\n//# sourceURL=webpack:///./client/src/models/countries.js?");
 
 /***/ }),
 
@@ -137,7 +137,7 @@ eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./clien
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\n\nconst CountryView = function (container){\n  this.container = container;\n};\n\nCountryView.prototype.render = function (country) {\n  const countryContainer = document.createElement('div');\n  const countryName = document.createElement('h2');\n  countryName.textContent = country.name;\n  countryContainer.appendChild(countryName);\n  this.container.appendChild(countryContainer);\n};\n\nCountryView.prototype.selectCountryForBucketList = function (country, id) {\n\n\n};\n\nmodule.exports = CountryView;\n\n\n//# sourceURL=webpack:///./client/src/views/country_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\n\nconst CountryView = function (container){\n  this.container = container;\n};\n\nCountryView.prototype.render = function (country) {\n  const countryContainer = document.createElement('div');\n  const countryName = document.createElement('h2');\n  countryName.textContent = country.name;\n  countryContainer.appendChild(countryName);\n  countryName.id = country._id;\n  this.selectCountryForBucketList(countryContainer);\n  this.container.appendChild(countryContainer);\n};\n\nCountryView.prototype.selectCountryForBucketList = function (container) {\n    container.addEventListener('click',(event) => {\n      PubSub.publish('CountryView:country-clicked', event.target.id);\n    });\n};\n\nmodule.exports = CountryView;\n\n\n//# sourceURL=webpack:///./client/src/views/country_view.js?");
 
 /***/ }),
 

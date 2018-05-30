@@ -9,5 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const countriesUrl = 'http://localhost:3000/api/countries'
     const countries = new Countries(countriesUrl);
+    countries.receiveClickedCountry();
     countries.getData();
 })

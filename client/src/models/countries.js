@@ -14,6 +14,24 @@ Countries.prototype.getData = function () {
     .catch(console.error);
 };
 
+Countries.prototype.receiveClickedCountry = function (event) {
+  PubSub.subscribe('CountryView:country-clicked', (event) => {
+    console.log('Clicked country subscribe ID?', event.detail);
+    this.updateRecord(event.detail);
+  });
+};
+
+Countries.prototype.updateRecord = function(id) {
+  //TODO Incorporate ID
+  const request = new Request(this.url);
+  //TODO use the id to access the country's onBucketList value to True
+  request.put()
+    .then((countries) => {
+      PubSub.publish('Countries:data-loaded', countries)
+    })
+    .catch(console.error);
+}
+
 
 
 module.exports = Countries;

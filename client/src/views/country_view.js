@@ -10,12 +10,15 @@ CountryView.prototype.render = function (country) {
   const countryName = document.createElement('h2');
   countryName.textContent = country.name;
   countryContainer.appendChild(countryName);
+  countryName.id = country._id;
+  this.selectCountryForBucketList(countryContainer);
   this.container.appendChild(countryContainer);
 };
 
-CountryView.prototype.selectCountryForBucketList = function (country, id) {
-
-
+CountryView.prototype.selectCountryForBucketList = function (container) {
+    container.addEventListener('click',(event) => {
+      PubSub.publish('CountryView:country-clicked', event.target.id);
+    });
 };
 
 module.exports = CountryView;
