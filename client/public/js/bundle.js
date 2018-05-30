@@ -91,9 +91,53 @@
   !*** ./client/src/app.js ***!
   \***************************/
 /*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\")\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+
+/***/ }),
+
+/***/ "./client/src/helpers/pub_sub.js":
+/*!***************************************!*\
+  !*** ./client/src/helpers/pub_sub.js ***!
+  \***************************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("\n\n//# sourceURL=webpack:///./client/src/app.js?");
+eval("const PubSub = {\n  publish: function (channel, payload) {\n    const event = new CustomEvent(channel, {\n      detail: payload\n    });\n    document.dispatchEvent(event);\n  },\n\n  subscribe: function (channel, callback) {\n    document.addEventListener(channel, callback);\n  }\n};\n\nmodule.exports = PubSub;\n\n\n//# sourceURL=webpack:///./client/src/helpers/pub_sub.js?");
+
+/***/ }),
+
+/***/ "./client/src/helpers/request.js":
+/*!***************************************!*\
+  !*** ./client/src/helpers/request.js ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("const Request = function (url) {\n  this.url = url;\n};\n\nRequest.prototype.get = function () {\n  return fetch(this.url)\n    .then((response) => response.json());\n};\n\nRequest.prototype.post = function (payload) {\n  return fetch(this.url, {\n    method: 'POST',\n    body: JSON.stringify(payload),\n    headers: { 'Content-Type': 'application/json' }\n  })\n    .then((response) => response.json());\n};\n\n//TODO Do we need a put function to update onBucketList true/false?\n// Request.prototype.put = function (payload) {\n//   return fetch(this.url), {}\n// }\n\nRequest.prototype.delete = function (id) {\n  return fetch(`${this.url}/${id}`, {\n    method: 'DELETE'\n  })\n    .then((response) => response.json());\n};\n\nmodule.exports = Request;\n\n\n//# sourceURL=webpack:///./client/src/helpers/request.js?");
+
+/***/ }),
+
+/***/ "./client/src/models/countries.js":
+/*!****************************************!*\
+  !*** ./client/src/models/countries.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./client/src/helpers/request.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\nconst Countries = function (url) {\n  this.url = url;\n};\n\nCountries.prototype.getData = function () {\n  const request = new Request(this.url);\n  request.get()\n    .then((countries) => {\n      PubSub.publish('Countries:data-loaded', countries)\n    })\n    .catch(console.error);\n};\n\n\n\nmodule.exports = Countries;\n\n\n//# sourceURL=webpack:///./client/src/models/countries.js?");
+
+/***/ }),
+
+/***/ "./client/src/views/main_list_view.js":
+/*!********************************************!*\
+  !*** ./client/src/views/main_list_view.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const Countries = __webpack_require__(/*! ../models/countries */ \"./client/src/models/countries.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub */ \"./client/src/helpers/pub_sub.js\");\n\nconst MainListView = function(container){\n  this.container = container;\n}\n\nMainListView.prototype.bindEvents = function () {\n  PubSub.subscribe('Countries:data-loaded', (evt) => {\n    console.log('MATTHEW! Countries data loaded and subscribed to.');\n  });\n};\n\nmodule.exports = MainListView;\n\n\n//# sourceURL=webpack:///./client/src/views/main_list_view.js?");
 
 /***/ })
 
