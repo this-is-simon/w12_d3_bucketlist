@@ -137,7 +137,7 @@ eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./clien
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\n\nconst CountryView = function (container){\n  this.container = container;\n};\n\nCountryView.prototype.render = function (country) {\n  const countryContainer = document.createElement('div');\n  const countryName = document.createElement('h2');\n  countryName.textContent = country.name;\n  countryContainer.appendChild(countryName);\n  this.container.appendChild(countryContainer);\n};\n\nmodule.exports = CountryView;\n\n\n//# sourceURL=webpack:///./client/src/views/country_view.js?");
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\n\nconst CountryView = function (container){\n  this.container = container;\n};\n\nCountryView.prototype.render = function (country) {\n  const countryContainer = document.createElement('div');\n  const countryName = document.createElement('h2');\n  countryName.textContent = country.name;\n  countryContainer.appendChild(countryName);\n  this.container.appendChild(countryContainer);\n};\n\nCountryView.prototype.selectCountryForBucketList = function (country, id) {\n\n\n};\n\nmodule.exports = CountryView;\n\n\n//# sourceURL=webpack:///./client/src/views/country_view.js?");
 
 /***/ }),
 

@@ -13,4 +13,9 @@ CountryView.prototype.render = function (country) {
   this.container.appendChild(countryContainer);
 };
 
+CountryView.prototype.selectCountryForBucketList = function (country, id) {
+
+
+};
+
 module.exports = CountryView;
