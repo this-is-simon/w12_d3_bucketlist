@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\")\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\");\nconst Countries = __webpack_require__(/*! ./models/countries.js */ \"./client/src/models/countries.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n    console.log('DOM content loaded');\n    const mainListViewContainer = document.querySelector('#main-list-view');\n    const mainListView = new MainListView(mainListViewContainer);\n    mainListView.bindEvents();\n\n\n\n    const countriesUrl = 'http://localhost:3000/api/countries'\n    const countries = new Countries(countriesUrl);\n    countries.getData();\n})\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
 
 /***/ }),
 
