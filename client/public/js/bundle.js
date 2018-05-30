@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\");\nconst Countries = __webpack_require__(/*! ./models/countries.js */ \"./client/src/models/countries.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n    console.log('DOM content loaded');\n    const mainListViewContainer = document.querySelector('#main-list-view');\n    const mainListView = new MainListView(mainListViewContainer);\n    mainListView.bindEvents();\n\n\n\n    const countriesUrl = 'http://localhost:3000/api/countries'\n    const countries = new Countries(countriesUrl);\n    countries.getData();\n})\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
+eval("const MainListView = __webpack_require__(/*! ./views/main_list_view.js */ \"./client/src/views/main_list_view.js\");\nconst Countries = __webpack_require__(/*! ./models/countries.js */ \"./client/src/models/countries.js\");\n\ndocument.addEventListener('DOMContentLoaded', () => {\n    console.log('DOM content loaded');\n    const mainListViewContainer = document.querySelector('#main-list-view');\n    const mainListView = new MainListView(mainListViewContainer);\n    mainListView.bindEvents();\n\n    const countriesUrl = 'http://localhost:3000/api/countries'\n    const countries = new Countries(countriesUrl);\n    countries.getData();\n})\n\n\n//# sourceURL=webpack:///./client/src/app.js?");
 
 /***/ }),
 
@@ -130,6 +130,17 @@ eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./clien
 
 /***/ }),
 
+/***/ "./client/src/views/country_view.js":
+/*!******************************************!*\
+  !*** ./client/src/views/country_view.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("const PubSub = __webpack_require__(/*! ../helpers/pub_sub.js */ \"./client/src/helpers/pub_sub.js\");\n\n\nconst CountryView = function (container){\n  this.container = container;\n};\n\nCountryView.prototype.render = function (country) {\n  const countryContainer = document.createElement('div');\n  const countryName = document.createElement('h2');\n  countryName.textContent = country.name;\n  countryContainer.appendChild(countryName);\n  this.container.appendChild(countryContainer);\n};\n\nmodule.exports = CountryView;\n\n\n//# sourceURL=webpack:///./client/src/views/country_view.js?");
+
+/***/ }),
+
 /***/ "./client/src/views/main_list_view.js":
 /*!********************************************!*\
   !*** ./client/src/views/main_list_view.js ***!
@@ -137,7 +148,7 @@ eval("const Request = __webpack_require__(/*! ../helpers/request.js */ \"./clien
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const Countries = __webpack_require__(/*! ../models/countries */ \"./client/src/models/countries.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub */ \"./client/src/helpers/pub_sub.js\");\n\nconst MainListView = function(container){\n  this.container = container;\n}\n\nMainListView.prototype.bindEvents = function () {\n  PubSub.subscribe('Countries:data-loaded', (evt) => {\n    console.log('MATTHEW! Countries data loaded and subscribed to.');\n  });\n};\n\nmodule.exports = MainListView;\n\n\n//# sourceURL=webpack:///./client/src/views/main_list_view.js?");
+eval("const Countries = __webpack_require__(/*! ../models/countries */ \"./client/src/models/countries.js\");\nconst PubSub = __webpack_require__(/*! ../helpers/pub_sub */ \"./client/src/helpers/pub_sub.js\");\nconst CountryView = __webpack_require__(/*! ../views/country_view.js */ \"./client/src/views/country_view.js\");\n\nconst MainListView = function(container){\n  this.container = container;\n}\n\nMainListView.prototype.bindEvents = function () {\n  PubSub.subscribe('Countries:data-loaded', (evt) => {\n    console.log(evt.detail);\n    this.render(evt.detail);\n  });\n};\n\nMainListView.prototype.render = function (countries) {\n  this.container.innerHTML = '';\n  const countryView = new CountryView(this.container);\n  countries.forEach((country) => countryView.render(country));\n};\n\n\nmodule.exports = MainListView;\n\n\n//# sourceURL=webpack:///./client/src/views/main_list_view.js?");
 
 /***/ })
 

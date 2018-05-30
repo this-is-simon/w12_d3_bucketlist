@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainListView = new MainListView(mainListViewContainer);
     mainListView.bindEvents();
 
-
-
     const countriesUrl = 'http://localhost:3000/api/countries'
     const countries = new Countries(countriesUrl);
     countries.getData();
